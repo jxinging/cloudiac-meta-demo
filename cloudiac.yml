@@ -1,0 +1,26 @@
+
+
+---
+templates: # 定义仓库下的模板列表，可预定义一些模板属性
+  - name: network
+    workdir: network
+    # tfvars: path/to/filename.tfvars	# 基于 workdir 的相对路径
+    # playbook: path/to/playbook.yml 	# 同上
+
+  - name: storage
+    workdir: storage
+
+  - name: service1
+    workdir: service1
+    # 定义依赖的环境 name，
+    # cloudiac 在执行部署时自动创建名为 env_{name} 的 tf 变量，通过变量可读取环境信息。
+    # 示例: service1/cloudiac_envs_autogen.tf
+    depend_envs: 
+      - network:
+        id: env-xxxxx	# 环境 id，若为空则需要在平台绑定
+      - storage
+      
+  - name: service2
+    workdir: service2
+    disabled: true
+
